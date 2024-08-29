@@ -22,8 +22,8 @@ def filter_datum(
     using regex substitution.
     """
     for field in fields:
-        message = re.sub(f'{field}=[^{separator}]*',
-                         f'{field}={redaction}', message)
+        message = re.sub(f"{field}=[^{separator}]*",
+                         f"{field}={redaction}", message)
     return message
 
 
@@ -63,12 +63,36 @@ def get_db() -> connection.MySQLConnection:
     """
     Returns a connector to the database.
     """
-    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
-    database = os.getenv('PERSONAL_DATA_DB_NAME')
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    database = os.getenv("PERSONAL_DATA_DB_NAME")
 
     return mysql.connector.connect(
-        user=username, password=password,
-        host=host, database=database
+        user=username, password=password, host=host, database=database
     )
+
+
+def main():
+    """
+    Retrieves all rows in the users table and logs each row
+    with filtered PII data.
+    """
+    logger = get_logger()
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+
+    for row in cursor:
+        message = (
+            f"name={row[0]}; email={row[1]}; phone={row[2]}; ssn={row[3]}; "
+            f"password={row[4]}; ip={row[5]}; last_login={row[6]};user_agent={row[7]}"
+        )
+        logger.info(message)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
