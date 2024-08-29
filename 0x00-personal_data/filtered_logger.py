@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Regex-ing
+Obfuscates specified fields in a log message
+using regex substitution.
 """
 
 import re
