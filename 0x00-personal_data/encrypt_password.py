@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+Hash a password string using bcrypt and return
+the salted, hashed password.
+"""
 import bcrypt
 
 
