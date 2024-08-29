@@ -7,6 +7,9 @@ using regex substitution.
 import re
 from typing import List
 import logging
+import os
+import mysql.connector
+from mysql.connector import connection
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -19,8 +22,8 @@ def filter_datum(
     using regex substitution.
     """
     for field in fields:
-        message = re.sub(f'{field}=[^{separator}]*', f'{field}={redaction}',
-                         message)
+        message = re.sub(f'{field}=[^{separator}]*',
+                         f'{field}={redaction}', message)
     return message
 
 
@@ -54,3 +57,18 @@ def get_logger() -> logging.Logger:
     logger.addHandler(handler)
 
     return logger
+
+
+def get_db() -> connection.MySQLConnection:
+    """
+    Returns a connector to the database.
+    """
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    database = os.getenv('PERSONAL_DATA_DB_NAME')
+
+    return mysql.connector.connect(
+        user=username, password=password,
+        host=host, database=database
+    )
