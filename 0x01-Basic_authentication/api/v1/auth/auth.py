@@ -31,7 +31,7 @@ class Auth:
         """Returns None - to be implemented later."""
         if request is None or request.headers.get('Authorization') is None:
             return None
-        return request.headers.get('Authorization', None)
+        return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar("User"):
         """Returns None - to be implemented later."""
