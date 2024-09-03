@@ -18,6 +18,6 @@ class Auth:
         """Returns None - to be implemented later."""
         return None
 
-    def current_user(self, request=None) -> TypeVar("User"):  # type: ignore
+    def current_user(self, request=None) -> TypeVar("User"):
         """Returns None - to be implemented later."""
         return None
