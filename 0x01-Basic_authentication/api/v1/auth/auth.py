@@ -19,13 +19,12 @@ class Auth:
         if excluded_paths is None or not excluded_paths:
             return True
 
-        if path.endswith('/'):
-            normalized_path = path
-        else:
-            normalized_path = path + '/'
+        if not path.endswith('/'):
+            path = path + '/'
 
-        if normalized_path in excluded_paths:
-            return False
+        for excluded_path in excluded_paths:
+            if path == excluded_path:
+                return False
 
         return True
 
