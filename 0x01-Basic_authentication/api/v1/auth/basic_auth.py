@@ -5,6 +5,7 @@ BasicAuth Class that inherits from Auth
 from .auth import Auth
 import base64
 from models.user import User
+from typing import TypeVar
 
 
 class BasicAuth(Auth):
@@ -79,4 +80,38 @@ class BasicAuth(Auth):
         if not user.is_valid_password(user_pwd):
             return None
 
+        return user
+
+    def current_user(self, request=None) -> TypeVar("User"):
+        """
+        Retrieves the User instance for a request using
+        Basic Authentication.
+        """
+        # Get the Authorization header from the request
+        authorization_header = self.authorization_header(request)
+        if authorization_header is None:
+            return None
+
+        # Extract the Base64 part of the Authorization header
+        base64_authorization = self.extract_base64_authorization_header(
+            authorization_header
+        )
+        if base64_authorization is None:
+            return None
+
+        # Decode the Base64 part of the Authorization header
+        decoded_authorization = self.decode_base64_authorization_header(
+            base64_authorization
+        )
+        if decoded_authorization is None:
+            return None
+
+        # Extract user credentials from the decoded Authorization header
+        user_email, user_pwd = self.extract_user_credentials(
+            decoded_authorization)
+        if user_email is None or user_pwd is None:
+            return None
+
+        # Retrieve the User object from the credentials
+        user = self.user_object_from_credentials(user_email, user_pwd)
         return user
