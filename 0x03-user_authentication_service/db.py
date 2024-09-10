@@ -49,9 +49,9 @@ class DB:
         input arguments
         """
         try:
-            user = self._session.query(User).filter_by(**kwargs).first()
+            user = self._session.query(User).filter_by(**kwargs).one()
             return user
         except NoResultFound:
-            raise
+            raise NoResultFound("Not found")
         except InvalidRequestError:
-            raise
+            raise InvalidRequestError("Invalid")
