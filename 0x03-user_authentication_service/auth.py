@@ -7,6 +7,7 @@ from db import DB, NoResultFound
 from user import User
 import uuid
 from typing import Union
+from uuid import uuid4
 
 
 def _hash_password(password: str) -> bytes:
@@ -126,3 +127,27 @@ class Auth:
             self._db.update_user(user_id, session_id=None)
         except NoResultFound:
             return None
+
+
+    def get_reset_password_token(self, email: str) -> str:
+        """
+        Generates a reset password token for the user with the given email.
+
+        Args:
+            email (str): The email of the user requesting a password reset.
+
+        Returns:
+            str: The generated reset password token.
+
+        Raises:
+            ValueError: If no user is found with the provided email.
+        """
+        user = self._db.find_user_by(email=email)
+        if not user:
+            raise ValueError("User not found")
+
+        reset_token = str(uuid4())
+
+        self._db.update_user(user.id, reset_token=reset_token)
+
+        return reset_token
