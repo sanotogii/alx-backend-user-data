@@ -6,9 +6,9 @@ from flask import Flask, jsonify, request, Response
 from auth import Auth
 from typing import Dict, Any
 
-AUTH = Auth()
-app = Flask(__name__)
 
+app = Flask(__name__)
+AUTH = Auth()
 
 @app.route("/", methods=["GET"])
 def Bonjour():
