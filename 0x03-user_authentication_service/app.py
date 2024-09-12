@@ -10,6 +10,7 @@ from typing import Dict, Any
 app = Flask(__name__)
 AUTH = Auth()
 
+
 @app.route("/", methods=["GET"])
 def Bonjour():
     """
