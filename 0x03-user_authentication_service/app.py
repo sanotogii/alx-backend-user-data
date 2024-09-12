@@ -2,7 +2,7 @@
 """
 Basic Flask app
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from auth import Auth
 from typing import Dict, Any
 
