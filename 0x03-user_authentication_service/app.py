@@ -17,15 +17,16 @@ def Bonjour():
     """
     return jsonify({"message": "Bienvenue"})
 
-@app.route('/users', methods=['POST'])
+
+@app.route("/users", methods=["POST"])
 def users():
     """
     POST /users endpoint to register a user.
     """
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-    
+    email = request.form.get("email")
+    password = request.form.get("password")
+
     if not email or not password:
         return jsonify({"message": "email and password required"}), 400
 
@@ -34,7 +35,6 @@ def users():
         return jsonify({"email": email, "message": "user created"}), 200
     except ValueError as e:
         return jsonify({"message": "email already registered"}), 400
-
 
 
 if __name__ == "__main__":
