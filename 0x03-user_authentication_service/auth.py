@@ -5,6 +5,7 @@ This module provides authentication-related utilities.
 import bcrypt
 from db import DB, NoResultFound
 from user import User
+import uuid
 
 
 def _hash_password(password: str) -> bytes:
@@ -23,6 +24,15 @@ def _hash_password(password: str) -> bytes:
     hashed = bcrypt.hashpw(password_bytes, salt)
 
     return hashed
+
+def _generate_uuid() -> str:
+    """
+    Generate a new UUID.
+
+    Returns:
+        str: String representation of a new UUID.
+    """
+    return str(uuid.uuid4())
 
 
 class Auth:
