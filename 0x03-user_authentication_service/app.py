@@ -19,7 +19,7 @@ def Bonjour():
 
 
 @app.route("/users", methods=["POST"])
-def users():
+def users() -> Response:
     """
     POST /users endpoint to register a user.
     """
