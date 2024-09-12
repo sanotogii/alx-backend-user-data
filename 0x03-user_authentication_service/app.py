@@ -3,6 +3,7 @@
 Basic Flask app
 """
 from flask import Flask, jsonify, request, Response, make_response, abort
+from flask import redirect
 from auth import Auth
 from typing import Dict, Any
 
@@ -53,6 +54,23 @@ def login():
     response.set_cookie("session_id", session_id)
 
     return response
+
+@app.route("/sessions", methods=["DELETE"])
+def logout():
+    """
+    DELETE /sessions endpoint to log out a user.
+    """
+    session_id = request.cookies.get("session_id")
+    if not session_id:
+        abort(403)
+
+    user = AUTH.get_user_from_session_id(session_id)
+    if not user:
+        abort(403)
+
+    AUTH.destroy_session(user.id)
+
+    return redirect("/")
 
 
 if __name__ == "__main__":
